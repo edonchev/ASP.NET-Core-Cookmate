@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cookmate.Data.Migrations
 {
     [DbContext(typeof(CookmateDbContext))]
-    [Migration("20210714174252_InitialCreationTables")]
+    [Migration("20210715051617_InitialCreationTables")]
     partial class InitialCreationTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,10 @@ namespace Cookmate.Data.Migrations
 
                     b.Property<double>("IngredientQuantity")
                         .HasColumnType("float");
+
+                    b.Property<string>("MeasurementUnit")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("IngredientId", "RecipeId");
 

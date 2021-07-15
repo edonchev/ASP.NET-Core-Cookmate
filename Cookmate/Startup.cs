@@ -1,6 +1,5 @@
 namespace Cookmate
 {
-    using Cookmate.Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -8,6 +7,8 @@ namespace Cookmate
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Cookmate.Data;
+    using Cookmate.Infrastructure;
 
     public class Startup
     {
@@ -40,6 +41,8 @@ namespace Cookmate
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,7 +66,7 @@ namespace Cookmate
                     endpoints.MapRazorPages();
                 });
 
-            //app.ApplicationServices.GetRequiredService(CookmateDbContext)
+            //app.ApplicationServices.GetService<CookmateDbContext>().Database.Migrate();
         }
     }
 }

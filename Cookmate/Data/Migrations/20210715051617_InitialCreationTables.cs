@@ -101,7 +101,8 @@ namespace Cookmate.Data.Migrations
                 {
                     IngredientId = table.Column<int>(type: "int", nullable: false),
                     RecipeId = table.Column<int>(type: "int", nullable: false),
-                    IngredientQuantity = table.Column<double>(type: "float", nullable: false)
+                    IngredientQuantity = table.Column<double>(type: "float", nullable: false),
+                    MeasurementUnit = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {

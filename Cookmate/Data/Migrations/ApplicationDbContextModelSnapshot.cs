@@ -74,6 +74,10 @@ namespace Cookmate.Data.Migrations
                     b.Property<double>("IngredientQuantity")
                         .HasColumnType("float");
 
+                    b.Property<string>("MeasurementUnit")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.HasKey("IngredientId", "RecipeId");
 
                     b.HasIndex("RecipeId");
