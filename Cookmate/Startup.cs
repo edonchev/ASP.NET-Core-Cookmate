@@ -65,8 +65,6 @@ namespace Cookmate
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
-
-            //app.ApplicationServices.GetService<CookmateDbContext>().Database.Migrate();
         }
     }
 }
