@@ -1,0 +1,44 @@
+﻿@model AllRecipesQueryModel
+
+@{
+    ViewData["Title"] = "Search Recipes";
+}
+
+
+<form method="get">
+    <div class="row mb-5">
+        <div class="form-group col-md-4">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Наименование">
+        </div>
+
+        <div class="form-group col-md-4">
+        </div>
+
+        <div class="form-group col-md-4">
+        </div>
+    </div>
+</form>
+
+<h2 class="text-center">All Recipes</h2>
+<div class="row">
+    @foreach (var recipe in Model.Recipes)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3" style="width: 18rem;">
+                <img class="card-img-top" src="@recipe.PictureUrl" alt="@recipe.Name @recipe.RecipeCategory @recipe.CookingTime @recipe.Likes">
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Name</h5>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Приготвяне: @recipe.CookingTime мин.</small>
+                    <br />
+                    <small class="text-muted">Харесвания: @recipe.Likes</small>
+                    <br />
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">View More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

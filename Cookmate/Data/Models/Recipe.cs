@@ -13,16 +13,21 @@ namespace Cookmate.Data.Models
         [MaxLength(RecipeNameMax)]
         public string Name { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public int CookingTime { get; set; }
 
         public int Likes { get; set; }
 
+        [Required]
         public string PictureUrl { get; set; }
 
+        [Required]
         public int RecipeCategoryId { get; set; }
 
+        [Required]
         public RecipeCategory RecipeCategory { get; init; }
 
         [Required]
