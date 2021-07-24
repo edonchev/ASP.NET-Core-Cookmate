@@ -19,21 +19,39 @@
             RecipeCategories = this.GetRecipeCategories()
         });
 
-        public IActionResult All(string searchTerm)
+        public IActionResult All([FromQuery]AllRecipesQueryModel query)
         {
             var recipesQuery = this.data.Recipes.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            var recipeCategories = this.GetRecipeCategories();
+
+            if (this.data.RecipeCategories.Any(c => c.Id == query.RecipeCategoryId))
+            {
+                recipesQuery = recipesQuery
+                    .Where(r => r.RecipeCategoryId == query.RecipeCategoryId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 recipesQuery = recipesQuery.Where(r =>
-                    r.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                    r.Description.ToLower().Contains(searchTerm.ToLower()) ||
+                    r.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    r.Description.ToLower().Contains(query.SearchTerm.ToLower()) ||
                     r.Ingredients.Any(i =>
-                        i.Ingredient.Name.ToLower().Contains(searchTerm.ToLower())));
+                        i.Ingredient.Name.ToLower().Contains(query.SearchTerm.ToLower())));
             };
 
+            recipesQuery = query.Sorting switch
+            {
+                RecipeSorting.MostLiked => recipesQuery.OrderByDescending(r => r.Likes).ThenBy(r => r.Name),
+                RecipeSorting.IngredientsCount => recipesQuery.OrderBy(r => r.Ingredients.Count()),
+                RecipeSorting.LastAdded or _=> recipesQuery.OrderByDescending(r => r.Id)
+            };
+
+            var totalRecipes = recipesQuery.Count();
+
             var recipes = recipesQuery
-                .OrderByDescending(r => r.Id)
+                .Skip((query.CurrentPage - 1) * AllRecipesQueryModel.RecipesPerPage)
+                .Take(AllRecipesQueryModel.RecipesPerPage)
                 .Select(r => new RecipeListingViewModel
                 {
                     Id = r.Id,
@@ -46,11 +64,11 @@
                 })
                 .ToList();
 
-            return View(new AllRecipesQueryModel
-            {
-                Recipes = recipes,
-                SearchTerm = searchTerm
-            });
+            query.Recipes = recipes;
+            query.RecipeCategories = recipeCategories;
+            query.TotalRecipes = totalRecipes;
+
+            return View(query);
         }
 
         [HttpPost]
