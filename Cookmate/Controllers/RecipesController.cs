@@ -6,6 +6,7 @@
     using Cookmate.Data;
     using Cookmate.Models.Recipes;
     using Cookmate.Data.Models;
+    using Cookmate.Models;
 
     public class RecipesController : Controller
     {

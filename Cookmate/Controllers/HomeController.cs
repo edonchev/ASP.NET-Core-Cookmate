@@ -17,6 +17,7 @@
         public IActionResult Index()
         {
             var totalRecipes = this.data.Recipes.Count();
+            var totalUsers = this.data.Users.Count();
 
             var recipes = this.data
                 .Recipes
@@ -34,6 +35,7 @@
             return View(new IndexViewModel 
             {
                 TotalRecipes = totalRecipes,
+                TotalUsers = totalUsers,
                 Recipes = recipes
             });
         }

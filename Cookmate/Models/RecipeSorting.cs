@@ -1,4 +1,4 @@
-﻿namespace Cookmate.Models.Recipes
+﻿namespace Cookmate.Models
 {
     public enum RecipeSorting
     {
