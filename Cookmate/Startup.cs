@@ -9,6 +9,8 @@ namespace Cookmate
     using Microsoft.Extensions.Hosting;
     using Cookmate.Data;
     using Cookmate.Infrastructure;
+    using Cookmate.Services.Statistics;
+    using Cookmate.Services.Recipes;
 
     public class Startup
     {
@@ -35,8 +37,10 @@ namespace Cookmate
                 })
                 .AddEntityFrameworkStores<CookmateDbContext>();
 
-            services
-                .AddControllersWithViews();
+            services.AddControllersWithViews();
+
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IRecipeService, RecipeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

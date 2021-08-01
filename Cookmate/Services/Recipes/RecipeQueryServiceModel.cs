@@ -1,8 +1,8 @@
-﻿namespace Cookmate.Models.Api.Recipes
+﻿namespace Cookmate.Services.Recipes
 {
     using System.Collections.Generic;
 
-    public class AllRecipesApiResponseModel
+    public class RecipeQueryServiceModel
     {
         public int TotalRecipes { get; init; }
 
@@ -10,6 +10,6 @@
 
         public int RecipesPerPage { get; init; }
 
-        public IEnumerable<RecipeResponseModel> Recipes { get; init; }
+        public IEnumerable<RecipeServiceModel> Recipes { get; init; }
     }
 }

@@ -2,29 +2,19 @@
 {
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
-    using Cookmate.Data;
-    using Cookmate.Models.Api.Statistics;
+    using Cookmate.Services.Statistics;
 
     [ApiController]
     [Route("api/statistics")]
     public class StatisticsApiController : ControllerBase
     {
-        private readonly CookmateDbContext data;
+        private readonly IStatisticsService statistics;
 
-        public StatisticsApiController(CookmateDbContext data)
-            => this.data = data;
+        public StatisticsApiController(IStatisticsService statistics)
+            => this.statistics = statistics;
 
         [HttpGet]
-        public StatisticsResponseModel GetStatistics()
-        {
-            var totalRecipes = this.data.Recipes.Count();
-            var toalUsers = this.data.Users.Count();
-
-            return new StatisticsResponseModel
-            {
-                TotalRecipes = totalRecipes,
-                TotalUsers = toalUsers
-            };
-        }
+        public StatisticsServiceModel GetStatistics()
+            => this.statistics.Get();
     }
 }

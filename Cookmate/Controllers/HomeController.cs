@@ -6,19 +6,23 @@
     using Cookmate.Models;
     using Cookmate.Data;
     using Cookmate.Models.Home;
+    using Cookmate.Services.Statistics;
 
     public class HomeController : Controller
     {
         private readonly CookmateDbContext data;
+        private readonly IStatisticsService statistics;
 
-        public HomeController(CookmateDbContext data) 
-            => this.data = data;
+        public HomeController(
+            CookmateDbContext data,
+            IStatisticsService statistics)
+        {
+            this.data = data;
+            this.statistics = statistics;
+        }
 
         public IActionResult Index()
         {
-            var totalRecipes = this.data.Recipes.Count();
-            var totalUsers = this.data.Users.Count();
-
             var recipes = this.data
                 .Recipes
                 .OrderByDescending(r => r.Id)
@@ -32,10 +36,12 @@
                 .Take(3)
                 .ToList();
 
+            var totalStatistics = this.statistics.Get();
+
             return View(new IndexViewModel 
             {
-                TotalRecipes = totalRecipes,
-                TotalUsers = totalUsers,
+                TotalRecipes = totalStatistics.TotalRecipes,
+                TotalUsers = totalStatistics.TotalUsers,
                 Recipes = recipes
             });
         }

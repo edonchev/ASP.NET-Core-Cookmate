@@ -1,6 +1,7 @@
-﻿namespace Cookmate.Models.Api.Statistics
+﻿namespace Cookmate.Services.Statistics
 {
-    public class StatisticsResponseModel
+
+    public class StatisticsServiceModel
     {
         public int TotalRecipes { get; init; }
 
