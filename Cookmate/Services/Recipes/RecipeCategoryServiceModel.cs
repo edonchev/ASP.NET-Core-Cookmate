@@ -1,6 +1,6 @@
-﻿namespace Cookmate.Models.Recipes
+﻿namespace Cookmate.Services.Recipes
 {
-    public class RecipeCategoryViewModel
+    public class RecipeCategoryServiceModel
     {
         public int Id { get; init; }
 

@@ -1,5 +1,6 @@
 ﻿namespace Cookmate.Services.Recipes
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Cookmate.Data;
     using Cookmate.Models;
@@ -8,7 +9,7 @@
     {
         private readonly CookmateDbContext data;
 
-        public RecipeService(CookmateDbContext data) 
+        public RecipeService(CookmateDbContext data)
             => this.data = data;
 
         public RecipeQueryServiceModel All(
@@ -67,5 +68,15 @@
                 Recipes = recipes
             };
         }
+
+        public IEnumerable<RecipeCategoryServiceModel> GetRecipeCategories()
+            => this.data
+                .RecipeCategories
+                .Select(rc => new RecipeCategoryServiceModel
+                {
+                    Id = rc.Id,
+                    Name = rc.Name
+                })
+                .ToList();
     }
 }

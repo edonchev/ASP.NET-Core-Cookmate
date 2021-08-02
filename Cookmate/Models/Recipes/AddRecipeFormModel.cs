@@ -1,5 +1,6 @@
 ﻿namespace Cookmate.Models.Recipes
 {
+    using Cookmate.Services.Recipes;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstants;
@@ -32,6 +33,6 @@
         [Display(Name = "Category")]
         public int RecipeCategoryId { get; init; }
 
-        public IEnumerable<RecipeCategoryViewModel> RecipeCategories { get; set; }
+        public IEnumerable<RecipeCategoryServiceModel> RecipeCategories { get; set; }
     }
 }

@@ -1,10 +1,5 @@
 ﻿namespace Cookmate.Models.Api.Recipes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     public class AllRecipesApiRequestModel
     {
         public int RecipeCategoryId { get; init; }

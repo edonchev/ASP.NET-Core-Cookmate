@@ -1,5 +1,6 @@
 ﻿namespace Cookmate.Models.Recipes
 {
+    using Cookmate.Services.Recipes;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -19,8 +20,8 @@
 
         public RecipeSorting Sorting { get; set; }
 
-        public IEnumerable<RecipeListingViewModel> Recipes { get; set; }
+        public IEnumerable<RecipeServiceModel> Recipes { get; set; }
 
-        public IEnumerable<RecipeCategoryViewModel> RecipeCategories { get; set; }
+        public IEnumerable<RecipeCategoryServiceModel> RecipeCategories { get; set; }
     }
 }
