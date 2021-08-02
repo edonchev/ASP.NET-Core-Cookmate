@@ -3,7 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Cookmate.Data;
+    using Cookmate.Data.Models;
     using Cookmate.Models;
+    using Cookmate.Models.Recipes;
 
     public class RecipeService : IRecipeService
     {
@@ -78,5 +80,23 @@
                     Name = rc.Name
                 })
                 .ToList();
+
+        public void AddRecipe(AddRecipeFormModel recipe)
+        {
+            var newRecipe = new Recipe
+            {
+                Name = recipe.Name,
+                Description = recipe.Description,
+                CookingTime = recipe.CookingTime,
+                Likes = 0,
+                PictureUrl = recipe.PictureUrl,
+                RecipeCategoryId = recipe.RecipeCategoryId
+                //Ingredients???
+            };
+
+            this.data.Recipes.Add(newRecipe);
+
+            this.data.SaveChanges();
+        }
     }
 }

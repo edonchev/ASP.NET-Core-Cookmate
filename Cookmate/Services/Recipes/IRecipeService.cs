@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Cookmate.Models;
+    using Cookmate.Models.Recipes;
 
     public interface IRecipeService
     {
@@ -13,5 +14,7 @@
             int recipesPerPage);
 
         IEnumerable<RecipeCategoryServiceModel> GetRecipeCategories();
+
+        void AddRecipe(AddRecipeFormModel recipe);
     }
 }

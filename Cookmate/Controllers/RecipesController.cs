@@ -27,16 +27,16 @@
         {
             var recipeCategories = this.recipeService.GetRecipeCategories();
 
-            var recipesQuery = this.recipeService
+            var queryResult = this.recipeService
                 .All(query.RecipeCategoryId,
                      query.SearchTerm,
                      query.Sorting,
                      query.CurrentPage,
                      AllRecipesQueryModel.RecipesPerPage);
 
-            query.Recipes = recipesQuery.Recipes;
+            query.Recipes = queryResult.Recipes;
             query.RecipeCategories = recipeCategories;
-            query.TotalRecipes = recipesQuery.TotalRecipes;
+            query.TotalRecipes = queryResult.TotalRecipes;
 
             return View(query);
         }
@@ -56,20 +56,7 @@
                 return View(recipe);
             }
 
-            var newRecipe = new Recipe
-            {
-                Name = recipe.Name,
-                Description = recipe.Description,
-                CookingTime = recipe.CookingTime,
-                Likes = 0,
-                PictureUrl = recipe.PictureUrl,
-                RecipeCategoryId = recipe.RecipeCategoryId
-                //Ingredients???
-            };
-
-            this.data.Recipes.Add(newRecipe);
-
-            this.data.SaveChanges();
+            this.recipeService.AddRecipe(recipe);
 
             return RedirectToAction(nameof(All));
         }
