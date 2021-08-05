@@ -3,9 +3,8 @@
     using Cookmate.Data.Models;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using System.Reflection;
 
-    public class CookmateDbContext : IdentityDbContext
+    public class CookmateDbContext : IdentityDbContext<User>
     {
         public CookmateDbContext(DbContextOptions<CookmateDbContext> options)
             : base(options)

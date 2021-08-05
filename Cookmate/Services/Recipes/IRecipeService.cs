@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Cookmate.Models;
-    using Cookmate.Models.Recipes;
 
     public interface IRecipeService
     {
@@ -15,6 +14,12 @@
 
         IEnumerable<RecipeCategoryServiceModel> GetRecipeCategories();
 
-        void AddRecipe(AddRecipeFormModel recipe);
+        bool RecipeCategoryExists(int recipeCategoryId);
+
+        int AddRecipe(string name,
+            string description,
+            int cookingTime,
+            string pictureUrl,
+            int recipeCategoryId);
     }
 }

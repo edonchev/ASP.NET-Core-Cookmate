@@ -81,22 +81,33 @@
                 })
                 .ToList();
 
-        public void AddRecipe(AddRecipeFormModel recipe)
+        public int AddRecipe(string name,
+                string description,
+                int cookingTime,
+                string pictureUrl,
+                int recipeCategoryId)
         {
             var newRecipe = new Recipe
             {
-                Name = recipe.Name,
-                Description = recipe.Description,
-                CookingTime = recipe.CookingTime,
-                Likes = 0,
-                PictureUrl = recipe.PictureUrl,
-                RecipeCategoryId = recipe.RecipeCategoryId
+                Name = name,
+                Description = description,
+                CookingTime = cookingTime,
+                PictureUrl = pictureUrl,
+                RecipeCategoryId = recipeCategoryId,
+                Likes = 0
                 //Ingredients???
             };
 
             this.data.Recipes.Add(newRecipe);
-
             this.data.SaveChanges();
+
+            return newRecipe.Id;
         }
+
+        public bool RecipeCategoryExists(int recipeCategoryId)
+            => this.data
+            .RecipeCategories
+            .Any(c => c.Id == recipeCategoryId);
+
     }
 }
