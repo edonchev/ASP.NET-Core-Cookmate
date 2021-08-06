@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace Cookmate.Data.Migrations
+﻿namespace Cookmate.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class InitialCreationTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
