@@ -12,11 +12,23 @@
             int currentPage,
             int recipesPerPage);
 
+        RecipeDetailsServiceModel Details(int recipeId);
+
+        IEnumerable<RecipeServiceModel> ByUser(string userId);
+
         IEnumerable<RecipeCategoryServiceModel> GetRecipeCategories();
 
         bool RecipeCategoryExists(int recipeCategoryId);
 
         int AddRecipe(string name,
+            string description,
+            int cookingTime,
+            string pictureUrl,
+            int recipeCategoryId,
+            string userId);
+
+        bool EditRecipe(int recipeId,
+            string name,
             string description,
             int cookingTime,
             string pictureUrl,

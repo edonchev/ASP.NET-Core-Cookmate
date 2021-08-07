@@ -33,5 +33,11 @@ namespace Cookmate.Data.Models
 
         [Required]
         public IEnumerable<IngredientRecipe> Ingredients { get; set; } = new List<IngredientRecipe>();
+        
+        [Required]
+        public string UserId { get; init; }
+
+        [Required]
+        public User User { get; init; }
     }
 }

@@ -13,6 +13,12 @@ namespace Cookmate.Data.Configuration
                 .WithMany(rc => rc.Recipes)
                 .HasForeignKey(r => r.RecipeCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            recipe
+                .HasOne(r => r.User)
+                .WithMany(u => u.Recipes)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

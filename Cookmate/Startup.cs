@@ -13,6 +13,7 @@ namespace Cookmate
     using Cookmate.Services.Statistics;
     using Cookmate.Services.Recipes;
     using Cookmate.Data.Models;
+    using Cookmate.Services.Users;
 
     public class Startup
     {
@@ -48,6 +49,7 @@ namespace Cookmate
 
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IRecipeService, RecipeService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,0 +1,49 @@
+﻿@model RecipeFormModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="text-center">@ViewBag.Title</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" placeholder="Наименование">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" rows="10" class="form-control" placeholder="Начин на приготвяне..."></textarea>
+                <span asp-validation-for="Description" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CookingTime"></label>
+                <input asp-for="CookingTime" class="form-control" placeholder="Време за приготвяне">
+                <span asp-validation-for="CookingTime" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PictureUrl"></label>
+                <input asp-for="PictureUrl" class="form-control" placeholder="Линк към снимка">
+                <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecipeCategoryId"></label>
+                <select asp-for="RecipeCategoryId" asp-items="@(new SelectList(Model.RecipeCategories, "Id", "Name"))" class="form-control">
+                    <option>--Избор на категория--</option>
+                </select>
+                <span asp-validation-for="RecipeCategoryId" class="small text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="exampleFormControlSelect2">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>*@
+
+            <input class="btn btn-primary" type="submit" value="Save" />
+        </form>
+    </div>
+</div>

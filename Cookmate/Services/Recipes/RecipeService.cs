@@ -47,20 +47,9 @@
 
             var totalRecipes = recipesQuery.Count();
 
-            var recipes = recipesQuery
+            var recipes = GetRecipes(recipesQuery
                 .Skip((currentPage - 1) * recipesPerPage)
-                .Take(recipesPerPage)
-                .Select(r => new RecipeServiceModel
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    Description = r.Description,
-                    CookingTime = r.CookingTime,
-                    Likes = r.Likes,
-                    PictureUrl = r.PictureUrl,
-                    RecipeCategory = r.RecipeCategory.Name
-                })
-                .ToList();
+                .Take(recipesPerPage));
 
             return new RecipeQueryServiceModel
             {
@@ -70,6 +59,30 @@
                 Recipes = recipes
             };
         }
+
+        public RecipeDetailsServiceModel Details(int recipeId)
+            => this.data
+                .Recipes
+                .Where(r => r.Id == recipeId)
+                .Select(r => new RecipeDetailsServiceModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    CookingTime = r.CookingTime,
+                    PictureUrl = r.PictureUrl,
+                    RecipeCategoryId = r.RecipeCategoryId,
+                    RecipeCategory = r.RecipeCategory.Name,
+                    Likes = r.Likes,
+                    UserId = r.UserId
+                })
+                .FirstOrDefault();
+
+        public IEnumerable<RecipeServiceModel> ByUser(string userId)
+            => GetRecipes(this.data
+                .Recipes
+                .Where(c => c.UserId == userId));
+
 
         public IEnumerable<RecipeCategoryServiceModel> GetRecipeCategories()
             => this.data
@@ -85,7 +98,8 @@
                 string description,
                 int cookingTime,
                 string pictureUrl,
-                int recipeCategoryId)
+                int recipeCategoryId,
+                string userId)
         {
             var newRecipe = new Recipe
             {
@@ -94,7 +108,8 @@
                 CookingTime = cookingTime,
                 PictureUrl = pictureUrl,
                 RecipeCategoryId = recipeCategoryId,
-                Likes = 0
+                Likes = 0,
+                UserId = userId
                 //Ingredients???
             };
 
@@ -104,10 +119,48 @@
             return newRecipe.Id;
         }
 
+        public bool EditRecipe(int recipeId,
+                string name,
+                string description,
+                int cookingTime,
+                string pictureUrl,
+                int recipeCategoryId)
+        {
+            var recipeData = this.data.Recipes.Find(recipeId);
+
+            if (recipeData == null)
+            {
+                return false;
+            }
+
+            recipeData.Name = name;
+            recipeData.Description = description;
+            recipeData.CookingTime = cookingTime;
+            recipeData.PictureUrl = pictureUrl;
+            recipeData.RecipeCategoryId = recipeCategoryId;
+            //Ingredients???
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
         public bool RecipeCategoryExists(int recipeCategoryId)
             => this.data
             .RecipeCategories
             .Any(c => c.Id == recipeCategoryId);
 
+        private static IEnumerable<RecipeServiceModel> GetRecipes(IQueryable<Recipe> recipeQuery)
+            => recipeQuery
+                .Select(r => new RecipeServiceModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    CookingTime = r.CookingTime,
+                    Likes = r.Likes,
+                    PictureUrl = r.PictureUrl,
+                    RecipeCategory = r.RecipeCategory.Name
+                })
+                .ToList();
     }
 }

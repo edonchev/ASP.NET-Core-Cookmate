@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstants;
 
-    public class AddRecipeFormModel
+    public class RecipeFormModel
     {
         [Required]
         [StringLength(RecipeNameMax, MinimumLength = RecipeNameMin)]

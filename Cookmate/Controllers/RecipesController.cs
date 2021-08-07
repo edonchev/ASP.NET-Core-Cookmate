@@ -4,23 +4,31 @@
     using Cookmate.Models.Recipes;
     using Cookmate.Services.Recipes;
     using Microsoft.AspNetCore.Authorization;
+    using Cookmate.Infrastructure;
+    using Cookmate.Services.Users;
 
     public class RecipesController : Controller
     {
         private readonly IRecipeService recipeService;
+        private readonly IUserService userService;
 
-        public RecipesController(IRecipeService recipeService) 
-            => this.recipeService = recipeService;
+        public RecipesController(
+            IRecipeService recipeService, 
+            IUserService userService)
+        {
+            this.recipeService = recipeService;
+            this.userService = userService;
+        }
 
         [Authorize]
-        public IActionResult Add() => View(new AddRecipeFormModel
+        public IActionResult Add() => View(new RecipeFormModel
         {
             RecipeCategories = this.recipeService.GetRecipeCategories()
         });
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddRecipeFormModel recipe)
+        public IActionResult Add(RecipeFormModel recipe)
         {
             if (!this.recipeService.RecipeCategoryExists(recipe.RecipeCategoryId))
             {
@@ -34,15 +42,26 @@
                 return View(recipe);
             }
 
+            var userId = this.User.GetId();
+
             this.recipeService.AddRecipe(
                 recipe.Name,
                 recipe.Description,
                 recipe.CookingTime,
                 recipe.PictureUrl,
-                recipe.RecipeCategoryId
+                recipe.RecipeCategoryId,
+                userId
                 );
 
             return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult Mine()
+        {
+            var userRecipes = this.recipeService.ByUser(this.User.GetId());
+
+            return View(userRecipes);
         }
 
         public IActionResult All([FromQuery] AllRecipesQueryModel query)
@@ -61,6 +80,69 @@
             query.TotalRecipes = queryResult.TotalRecipes;
 
             return View(query);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
+            var recipe = this.recipeService.Details(id);
+
+            if (recipe.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new RecipeFormModel
+            {
+                Name = recipe.Name,
+                Description = recipe.Description,
+                CookingTime = recipe.CookingTime,
+                PictureUrl = recipe.PictureUrl,
+                RecipeCategoryId = recipe.RecipeCategoryId,
+                RecipeCategories = this.recipeService.GetRecipeCategories()
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, RecipeFormModel recipe)
+        {
+            var userCanEdit = this.userService
+                    .IsRecipeOwner(id, this.User.GetId());
+
+            if (!userCanEdit && !this.User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
+            if (!this.recipeService.RecipeCategoryExists(recipe.RecipeCategoryId))
+            {
+                this.ModelState.AddModelError(nameof(recipe.RecipeCategoryId), "Category does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                recipe.RecipeCategories = this.recipeService.GetRecipeCategories();
+
+                return View(recipe);
+            }
+
+            var edited = this.recipeService.EditRecipe(
+                id,
+                recipe.Name,
+                recipe.Description,
+                recipe.CookingTime,
+                recipe.PictureUrl,
+                recipe.RecipeCategoryId
+                );
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
         }
     }
 }
