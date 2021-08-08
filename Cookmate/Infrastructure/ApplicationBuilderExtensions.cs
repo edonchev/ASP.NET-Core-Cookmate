@@ -6,11 +6,10 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.Identity;
     using Cookmate.Data;
     using Cookmate.Data.Models;
-    using Microsoft.AspNetCore.Identity;
-
-    using static WebConstants;
+    using static Cookmate.Areas.Admin.AdminConstants;
 
     public static class ApplicationBuilderExtensions
     {
