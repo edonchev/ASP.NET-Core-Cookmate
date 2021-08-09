@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Cookmate.Models.Api.Recipes;
     using Cookmate.Services.Recipes;
+    using Cookmate.Services.Recipes.Models;
 
     [ApiController]
     [Route("api/recipes")]

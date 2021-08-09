@@ -1,4 +1,4 @@
-﻿namespace Cookmate.Services.Recipes
+﻿namespace Cookmate.Services.Recipes.Models
 {
     using System.Collections.Generic;
 

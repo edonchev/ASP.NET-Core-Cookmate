@@ -42,6 +42,8 @@ namespace Cookmate
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CookmateDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
@@ -75,10 +77,7 @@ namespace Cookmate
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                        name: "Areas",
-                        pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+                    endpoints.MapDefaultAreaRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

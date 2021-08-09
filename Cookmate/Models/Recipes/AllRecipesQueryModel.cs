@@ -1,8 +1,8 @@
 ﻿namespace Cookmate.Models.Recipes
 {
-    using Cookmate.Services.Recipes;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Cookmate.Services.Recipes.Models;
 
     public class AllRecipesQueryModel
     {

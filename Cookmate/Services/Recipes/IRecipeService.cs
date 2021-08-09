@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Cookmate.Models;
+    using Cookmate.Services.Recipes.Models;
 
     public interface IRecipeService
     {

@@ -3,6 +3,8 @@
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Cookmate.Models;
     using Cookmate.Data;
     using Cookmate.Models.Home;
@@ -11,13 +13,16 @@
     public class HomeController : Controller
     {
         private readonly CookmateDbContext data;
+        private readonly IMapper mapper;
         private readonly IStatisticsService statistics;
 
         public HomeController(
             CookmateDbContext data,
+            IMapper mapper,
             IStatisticsService statistics)
         {
             this.data = data;
+            this.mapper = mapper;
             this.statistics = statistics;
         }
 
@@ -26,13 +31,7 @@
             var recipes = this.data
                 .Recipes
                 .OrderByDescending(r => r.Id)
-                .Select(r => new RecipeIndexViewModel
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    PictureUrl = r.PictureUrl,
-                    Likes = r.Likes
-                })
+                .ProjectTo<RecipeIndexViewModel>(this.mapper.ConfigurationProvider)
                 .Take(3)
                 .ToList();
 

@@ -2,17 +2,23 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Cookmate.Data;
     using Cookmate.Data.Models;
     using Cookmate.Models;
-    using Cookmate.Models.Recipes;
+    using Cookmate.Services.Recipes.Models;
 
     public class RecipeService : IRecipeService
     {
         private readonly CookmateDbContext data;
+        private readonly IMapper mapper;
 
-        public RecipeService(CookmateDbContext data)
-            => this.data = data;
+        public RecipeService(CookmateDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public RecipeQueryServiceModel All(
             int recipeCategoryId,
@@ -64,18 +70,7 @@
             => this.data
                 .Recipes
                 .Where(r => r.Id == recipeId)
-                .Select(r => new RecipeDetailsServiceModel
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    Description = r.Description,
-                    CookingTime = r.CookingTime,
-                    PictureUrl = r.PictureUrl,
-                    RecipeCategoryId = r.RecipeCategoryId,
-                    RecipeCategory = r.RecipeCategory.Name,
-                    Likes = r.Likes,
-                    UserId = r.UserId
-                })
+                .ProjectTo<RecipeDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
         public IEnumerable<RecipeServiceModel> ByUser(string userId)

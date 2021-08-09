@@ -6,18 +6,22 @@
     using Microsoft.AspNetCore.Authorization;
     using Cookmate.Infrastructure;
     using Cookmate.Services.Users;
+    using AutoMapper;
 
     public class RecipesController : Controller
     {
         private readonly IRecipeService recipeService;
         private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public RecipesController(
-            IRecipeService recipeService, 
-            IUserService userService)
+            IRecipeService recipeService,
+            IUserService userService, 
+            IMapper mapper)
         {
             this.recipeService = recipeService;
             this.userService = userService;
+            this.mapper = mapper;
         }
 
         [Authorize]
@@ -93,15 +97,10 @@
                 return Unauthorized();
             }
 
-            return View(new RecipeFormModel
-            {
-                Name = recipe.Name,
-                Description = recipe.Description,
-                CookingTime = recipe.CookingTime,
-                PictureUrl = recipe.PictureUrl,
-                RecipeCategoryId = recipe.RecipeCategoryId,
-                RecipeCategories = this.recipeService.GetRecipeCategories()
-            });
+            var recipeForm = this.mapper.Map<RecipeFormModel>(recipe);
+            recipeForm.RecipeCategories = this.recipeService.GetRecipeCategories();
+
+            return View(recipeForm);
         }
 
         [HttpPost]
