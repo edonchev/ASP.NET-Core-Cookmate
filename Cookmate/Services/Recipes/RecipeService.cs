@@ -12,12 +12,12 @@
     public class RecipeService : IRecipeService
     {
         private readonly CookmateDbContext data;
-        private readonly IMapper mapper;
+        private readonly IConfigurationProvider mapper;
 
         public RecipeService(CookmateDbContext data, IMapper mapper)
         {
             this.data = data;
-            this.mapper = mapper;
+            this.mapper = mapper.ConfigurationProvider;
         }
 
         public RecipeQueryServiceModel All(
@@ -70,7 +70,7 @@
             => this.data
                 .Recipes
                 .Where(r => r.Id == recipeId)
-                .ProjectTo<RecipeDetailsServiceModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<RecipeDetailsServiceModel>(this.mapper)
                 .FirstOrDefault();
 
         public IEnumerable<RecipeServiceModel> ByUser(string userId)
@@ -156,6 +156,14 @@
                     PictureUrl = r.PictureUrl,
                     RecipeCategory = r.RecipeCategory.Name
                 })
+                .ToList();
+
+        public IEnumerable<LatestRecipeServiceModel> Latest() 
+            => this.data
+                .Recipes
+                .OrderByDescending(r => r.Id)
+                .ProjectTo<LatestRecipeServiceModel>(this.mapper)
+                .Take(3)
                 .ToList();
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Cookmate.Models.Home
+﻿namespace Cookmate.Services.Recipes.Models
 {
-    public class RecipeIndexViewModel
+    public class LatestRecipeServiceModel
     {
         public int Id { get; init; }
 

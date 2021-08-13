@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-
-namespace Cookmate.Models.Home
+﻿namespace Cookmate.Models.Home
 {
+    using Cookmate.Services.Recipes.Models;
+    using System.Collections.Generic;
+
     public class IndexViewModel
     {
         public int TotalRecipes { get; init; }
 
         public int TotalUsers { get; set; }
 
-        public List<RecipeIndexViewModel> Recipes { get; init; }
+        public IList<LatestRecipeServiceModel> Recipes { get; init; }
     }
 }

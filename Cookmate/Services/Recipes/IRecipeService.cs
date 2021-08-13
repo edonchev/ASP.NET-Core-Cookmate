@@ -13,6 +13,8 @@
             int currentPage,
             int recipesPerPage);
 
+        IEnumerable<LatestRecipeServiceModel> Latest();
+
         RecipeDetailsServiceModel Details(int recipeId);
 
         IEnumerable<RecipeServiceModel> ByUser(string userId);

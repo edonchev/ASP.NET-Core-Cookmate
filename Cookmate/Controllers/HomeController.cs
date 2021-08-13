@@ -1,38 +1,28 @@
 ﻿namespace Cookmate.Controllers
 {
-    using System.Diagnostics;
-    using System.Linq;
     using Microsoft.AspNetCore.Mvc;
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using Cookmate.Models;
-    using Cookmate.Data;
     using Cookmate.Models.Home;
     using Cookmate.Services.Statistics;
+    using Cookmate.Services.Recipes;
+    using System.Linq;
 
     public class HomeController : Controller
     {
-        private readonly CookmateDbContext data;
-        private readonly IMapper mapper;
         private readonly IStatisticsService statistics;
+        private readonly IRecipeService recipeServices;
 
         public HomeController(
-            CookmateDbContext data,
-            IMapper mapper,
-            IStatisticsService statistics)
+            IStatisticsService statistics,
+            IRecipeService services)
         {
-            this.data = data;
-            this.mapper = mapper;
             this.statistics = statistics;
+            this.recipeServices = services;
         }
 
         public IActionResult Index()
         {
-            var recipes = this.data
-                .Recipes
-                .OrderByDescending(r => r.Id)
-                .ProjectTo<RecipeIndexViewModel>(this.mapper.ConfigurationProvider)
-                .Take(3)
+            var latestRecipes = this.recipeServices
+                .Latest()
                 .ToList();
 
             var totalStatistics = this.statistics.Get();
@@ -41,12 +31,10 @@
             {
                 TotalRecipes = totalStatistics.TotalRecipes,
                 TotalUsers = totalStatistics.TotalUsers,
-                Recipes = recipes
+                Recipes = latestRecipes
             });
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() 
-            => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error() => View();
     }
 }
