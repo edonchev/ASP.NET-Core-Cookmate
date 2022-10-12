@@ -36,5 +36,7 @@
             int cookingTime,
             string pictureUrl,
             int recipeCategoryId);
+
+        void DeleteRecipe(int id);
     }
 }

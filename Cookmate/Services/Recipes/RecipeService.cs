@@ -165,5 +165,12 @@
                 .ProjectTo<LatestRecipeServiceModel>(this.mapper)
                 .Take(3)
                 .ToList();
+
+        public void DeleteRecipe(int id)
+        {
+            var recipeToDelete = this.data.Recipes.Find(id);
+            this.data.Recipes.Remove(recipeToDelete);
+            this.data.SaveChanges();
+        }
     }
 }

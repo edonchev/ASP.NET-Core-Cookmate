@@ -15,10 +15,17 @@
                     <small class="text-muted">Харесвания: @recipe.Likes</small>
                     <br />
                     <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">View More</a>
-                    @if (ViewBag.AllowRecipeEdit == true)
+                    @if (ViewBag.AllowRecipeEdit == true || this.User.IsInRole("Administrator"))
                     {
                         <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@recipe.Id" class="btn btn-warning">Edit</a>
-                        <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@recipe.Id" class="btn btn-danger">Delete</a>
+                        <div id="confirmDeleteSpan_@recipe.Id" style="display:none">
+                            <span>Are you sure you want to delete?</span>
+                            <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@recipe.Id" class="btn btn-danger">Yes</a>
+                            <a class="btn btn-primary" onclick="confirmDelete('@recipe.Id', false)">No</a>
+                        </div>
+                        <span id="deleteSpan_@recipe.Id">
+                            <a class="btn btn-danger" onclick="confirmDelete('@recipe.Id', true)">Delete</a>
+                        </span>
                     }
                 </div>
             </div>

@@ -92,7 +92,7 @@
             var userId = this.User.GetId();
             var recipe = this.recipeService.Details(id);
 
-            if (recipe.UserId != userId)
+            if (recipe.UserId != userId && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -141,6 +141,22 @@
                 return BadRequest();
             }
 
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var userCanEdit = this.userService
+                    .IsRecipeOwner(id, this.User.GetId())
+                    || this.User.IsAdmin();
+
+            if (!userCanEdit)
+            {
+                return Unauthorized();
+            }
+
+            this.recipeService.DeleteRecipe(id);
             return RedirectToAction(nameof(All));
         }
     }
