@@ -1,0 +1,77 @@
+﻿@model AllRecipesQueryModel
+
+@{
+    ViewBag.Title = "Search Recipes";
+}
+
+<form method="get">
+    <div class="row mb-3">
+        <div class="form-group col-md-4">
+            <label asp-for="RecipeCategoryId"></label>
+            <select asp-for="RecipeCategoryId" class="form-control">
+                <option>--Всички--</option>
+                @foreach (var category in Model.RecipeCategories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Какво Ви се хапва?">
+        </div>
+
+        <div class="form-group col-md-4">
+            <label asp-for="Sorting"></label>
+            <select asp-for="Sorting" class="form-control">
+                <option value="0" selected>LastAdded</option>
+                <option value="1">MostLiked</option>
+                <option value="2">IngredientsCount</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalRecipes / AllRecipesQueryModel.RecipesPerPage);
+}
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Recipes"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-recipeCategoryId="@Model.RecipeCategoryId"
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary float-right @(Model.CurrentPage == maxPage ? " disabled" : string.Empty)"
+           asp-controller="Recipes"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-recipeCategoryId="@Model.RecipeCategoryId"
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
+    </div>
+</div>
+
+@if (!Model.Recipes.Any())
+{
+    <h2 class="text-center">No recipes found by the given criteria!</h2>
+}
+
+<h2 class="text-center">All Recipes</h2>
+
+<partial name="_RecipesPartial" model="@Model.Recipes"/>
+
+
+
